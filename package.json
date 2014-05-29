@@ -1,0 +1,19 @@
+{
+  "name": "stravabit",
+  "version": "0.0.0",
+  "description": "Strava - FitBit Activity Synch",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jwickard/stravabit.git"
+  },
+  "author": "Joel Wickard",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jwickard/stravabit/issues"
+  },
+  "homepage": "https://github.com/jwickard/stravabit"
+}
