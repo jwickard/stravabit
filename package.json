@@ -15,7 +15,7 @@
   "bugs": {
     "url": "https://github.com/jwickard/stravabit/issues"
   },
-  "homepage": "https://github.com/jwickard/stravabit"
+  "homepage": "https://github.com/jwickard/stravabit",
 
     "engines": {
         "node": "0.10.x"
