@@ -27,3 +27,4 @@ node_modules
 #ignore intellij files
 .idea/
 *.iml
+*.env
