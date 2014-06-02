@@ -1,10 +1,8 @@
-var passport = require('passport');
-var FitbitStrategy = require('passport-fitbit').Strategy;
-var StravaStrategy = require('passport-strava').Strategy;
-var express = require('express');
-var session = require('cookie-session');
-var cookieParser = require('cookie-parser');
+passport = require('passport');
+FitbitStrategy = require('passport-fitbit').Strategy;
+StravaStrategy = require('passport-strava').Strategy;
 
+//handle passport user callbacks
 passport.serializeUser(function(user, done) {
     done(null, user);
 });
@@ -44,27 +42,3 @@ passport.use(new StravaStrategy({
         });
     }
 ));
-
-var app = express();
-
-
-//app.use(express.logger());
-app.use(passport.initialize());
-app.use(cookieParser());
-app.use(session({secret: '1234567890QWERTY'}));
-
-app.get('/auth/fitbit', passport.authenticate('fitbit'));
-app.get('/auth/strava', passport.authenticate('strava'));
-
-app.get('/auth/fitbit/callback', passport.authenticate('fitbit', {successRedirect: '/', failureRedirect: '/login'}));
-app.get('/auth/strava/callback', passport.authenticate('strava', {successRedirect: '/', failureRedirect: '/login'}));
-
-app.get('/', function(req, res){
-    res.send('SUCCESS!!!!');
-});
-
-app.get('/login', function(req, res){
-    res.send('FAIL');
-});
-
-app.listen(8080);

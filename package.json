@@ -23,6 +23,7 @@
     "cookie-parser": "^1.1.0",
     "cookie-session": "^1.0.2",
     "express": "^4.3.2",
+    "mongoose": "^3.8.12",
     "passport": "^0.2.0",
     "passport-fitbit": "^0.1.2",
     "passport-oauth": "^1.0.0",
