@@ -1,6 +1,6 @@
 var express = require('express');
-var session = require('cookie-session');
-var cookieParser = require('cookie-parser');
+session = require('cookie-session');
+cookieParser = require('cookie-parser');
 
 //include our model layer
 require('./models');
@@ -18,3 +18,4 @@ app.use(session({secret: '1234567890QWERTY'}));
 require('./routes');
 
 app.listen(8080);
+

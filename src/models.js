@@ -4,18 +4,20 @@ mongoose.connect('mongodb://localhost/stravabit');
 
 Schema = mongoose.Schema;
 
-User = new Schema({
+UserSchema = new Schema({
     name: { type: String, required: true }
 });
 
-UserModel = mongoose.model('User', User);
+User = mongoose.model('User', UserSchema);
 
-Authentication = new Schema({
+AuthenticationSchema = new Schema({
     oauthId: { type: String, required: true },
     provider: { type: String, required: true },
     token: { type: String, required: true },
-    expires: { type: Number, required: true },
-    userId: { type: String, required: true }
+    tokenSecret: { type: String, required: false },
+    expires: { type: Number, required: false },
+    userId: { type: String, required: true },
+    last_run: { type: Number, required: false }
 });
 
-AuthenticationModel = mongoose.model('Authentication', Authentication);
+Auth = mongoose.model('Authentication', AuthenticationSchema);
