@@ -7,7 +7,7 @@ app.get('/auth/fitbit/callback', passport.authenticate('fitbit', {successRedirec
 app.get('/auth/strava/callback', passport.authenticate('strava', {successRedirect: '/', failureRedirect: '/login'}));
 
 app.get('/', ensureAuthenticated, function(req, res){
-    res.send('We Made It!!!!');
+    res.send('Authenticated To Strava & FitBit');
 });
 
 app.get('/login', function(req, res){
