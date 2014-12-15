@@ -11,8 +11,6 @@ User.find({}, function(err, docs){
     if(err){ console.log(err); }
 
     docs.forEach(function(user){
-        console.log('ROCK');
-        console.log(user._id);
 
         Auth.findOne({'userId': user._id, 'provider': 'strava'}, 'oauthId token last_run', function(err, doc){
             if(err){ console.log(err); }
