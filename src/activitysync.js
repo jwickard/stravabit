@@ -1,3 +1,4 @@
+/* Script to run as a job / dyno to sync activities between strava and fitbit */
 var dotenv = require('dotenv');
 var log = require('loglevel');
 var request = require('request');
