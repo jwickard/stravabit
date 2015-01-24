@@ -1,11 +1,13 @@
 var express = require('express');
-session = require('cookie-session');
+var session = require('cookie-session')({secret: '1234567890QWERTY'});
+var fitBitClient = require('./src/fitbit')(session);
+var stravaClient = require('./src/strava')(session);
 var cookieParser = require('cookie-parser');
 var morgan = require('morgan');
 
 
 //fire up our micro services container
-require('./src/services');
+var Services = require('./src/services')(fitBitClient, stravaClient);
 
 app = express();
 
@@ -15,9 +17,7 @@ app.use(morgan('combined'));
 
 app.use(cookieParser());
 
-var session = session({secret: '1234567890QWERTY'});
-
-var auth = require('./src/auth')(session);
+var auth = require('./src/auth')(session, fitBitClient, stravaClient);
 
 app.use(session);
 
@@ -28,6 +28,6 @@ app.use(express.static('./public'));
 console.log(__dirname);
 
 //include our routes.
-require('./src/routes');
+require('./src/routes')(app, session, auth, Services);
 
 app.listen(3000);

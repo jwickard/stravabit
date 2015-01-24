@@ -1,11 +1,9 @@
 'use strict';
 var AuthModel = require('./models').AuthModel;
 var UserModel = require('./models').UserModel;
-var FitBitService = require('./fitbit').FitBitClient;
-var StravaClient = require('./strava').StravaClient;
 var passport = require('passport');
 
-module.exports = function (session) {
+module.exports = function (session, fitBitClient, stravaClient) {
     var module = {};
 
     module.passport = passport;
@@ -21,9 +19,9 @@ module.exports = function (session) {
         });
     });
 
-    module.passport.use(FitBitService.getOauthStrategy());
+    module.passport.use(fitBitClient.getOauthStrategy());
 
-    module.passport.use(StravaClient.getOauthStrategy());
+    module.passport.use(stravaClient.getOauthStrategy());
 
     module.ensureAuthenticated = function (res, next) {
         var userId = session.userId;
