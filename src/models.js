@@ -2,15 +2,14 @@ mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost/stravabit');
 
-Schema = mongoose.Schema;
+var Schema = mongoose.Schema;
 
-UserSchema = new Schema({
-    name: { type: String, required: true }
-});
+var UserModel = mongoose.model('User', new Schema({
+    name: { type: String, required: true },
+    lastSynchedAt: { type: Number, required: false}
+}));
 
-User = mongoose.model('User', UserSchema);
-
-AuthenticationSchema = new Schema({
+var AuthModel = mongoose.model('Authentication', new Schema({
     oauthId: { type: String, required: true },
     provider: { type: String, required: true },
     token: { type: String, required: true },
@@ -18,6 +17,16 @@ AuthenticationSchema = new Schema({
     expires: { type: Number, required: false },
     userId: { type: String, required: true },
     last_run: { type: Number, required: false }
-});
+}));
 
-Auth = mongoose.model('Authentication', AuthenticationSchema);
+var ActivityModel = mongoose.model('Activity', new Schema({
+    userId: { type: String, required: true },
+    activityId: { type: String, required: true},
+    name: { type: String, required: true },
+    synchedAt: { type: Number, required: true },
+    activityDate: { type: Number, required: true }
+}));
+
+exports.AuthModel = AuthModel;
+exports.UserModel = UserModel;
+exports.ActivityModel = ActivityModel;
