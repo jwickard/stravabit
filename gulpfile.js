@@ -12,7 +12,8 @@ gulp.task('lint', function(){
             evil: true,
             nomen: true,
             reporter: 'default',
-            errorsOnly: false
+            errorsOnly: false,
+            unparam: true
 
         }))
         .on('error', function(error){

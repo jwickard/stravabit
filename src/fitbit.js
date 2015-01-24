@@ -3,12 +3,11 @@
 var AuthModel = require('./models').AuthModel;
 var UserModel = require('./models').UserModel;
 var FitbitStrategy = require('passport-fitbit').Strategy;
-var Promise = require('promise');
+var Promises = require('promise');
 
-module.exports = function(session) {
-    var FitBitService = {};
-
-    var _strat = new FitbitStrategy({
+module.exports = function (session) {
+    var FitBitService = {},
+        _strat = new FitbitStrategy({
             consumerKey: process.env.FITBIT_CONSUMER_KEY,
             consumerSecret: process.env.FITBIT_CONSUMER_SECRET,
             callbackURL: process.env.FITBIT_CALLBACK
@@ -24,16 +23,16 @@ module.exports = function(session) {
                             if (err) { return done(err); }
 
                             if (user) {
-                                AuthModel.findOneAndUpdate({ userId: user._id, provider: 'fitbit'}, {token: token, tokenSecret: tokenSecret}, function (err, auth) {
+                                AuthModel.findOneAndUpdate({ userId: user._id, provider: 'fitbit'}, {token: token, tokenSecret: tokenSecret}, function (err) {
                                     if (err) { return done(err); }
                                     console.log('updated token: ' + token + ' secret: ' + tokenSecret);
                                 });
 
                                 session.userId = user.id;
                                 return done(null, user);
-                            } else {
-                                return done(null, false);
                             }
+
+                            return done(null, false);
                         });
                     } else {
                         //create!
@@ -56,12 +55,11 @@ module.exports = function(session) {
                     }
                 });
             });
-        }
-    );
+        });
 
 //int|id, HH:mm|startTime, long|durationMillis, yyyy-MM-dd:date, X.XX|distance
     FitBitService.logActivity = function (auth, activityId, startTime, durationMillis, date, distance, distanceUnit) {
-        return new Promise(function (fullfill, reject) {
+        return new Promises(function (fullfill, reject) {
             var postParams = {
                 'activityId': activityId,
                 'startTime': startTime,
@@ -77,6 +75,7 @@ module.exports = function(session) {
                 if (err) { console.log(err); reject(err); }
                 fullfill(body);
             });
+
         });
     };
 
