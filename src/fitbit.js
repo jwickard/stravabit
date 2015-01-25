@@ -1,65 +1,11 @@
-'use strict';
+var P = require('promise');
 
-var AuthModel = require('./models').AuthModel;
-var UserModel = require('./models').UserModel;
-var FitbitStrategy = require('passport-fitbit').Strategy;
-var Promises = require('promise');
+module.exports = function (oauthClient) {
+    var FitBitService = {};
 
-module.exports = function (session) {
-    var FitBitService = {},
-        _strat = new FitbitStrategy({
-            consumerKey: process.env.FITBIT_CONSUMER_KEY,
-            consumerSecret: process.env.FITBIT_CONSUMER_SECRET,
-            callbackURL: process.env.FITBIT_CALLBACK
-        }, function (token, tokenSecret, params, profile, done) {
-
-            process.nextTick(function () {
-                AuthModel.findOne({ oauthId: profile.id}, function (err, doc) {
-                    if (err) { return done(err); }
-
-                    if (doc) {
-                        //find our user based on existing authentication.
-                        UserModel.findOne({_id: doc.userId }, function (err, user) {
-                            if (err) { return done(err); }
-
-                            if (user) {
-                                AuthModel.findOneAndUpdate({ userId: user._id, provider: 'fitbit'}, {token: token, tokenSecret: tokenSecret}, function (err) {
-                                    if (err) { return done(err); }
-                                    console.log('updated token: ' + token + ' secret: ' + tokenSecret);
-                                });
-
-                                session.userId = user.id;
-                                return done(null, user);
-                            }
-
-                            return done(null, false);
-                        });
-                    } else {
-                        //create!
-                        var user = new UserModel({ name: profile.displayName });
-
-                        user.save(function (err) {
-                            if (err) { return done(err); }
-
-                            var authModel = new AuthModel({ oauthId: profile.id, provider: profile.provider, userId: user.id, token: token, tokenSecret: tokenSecret });
-
-                            authModel.save(function (err) {
-                                if (err) { return done(err); }
-
-                                session.userId = user.id;
-
-                                //success!
-                                return done(null, user);
-                            });
-                        });
-                    }
-                });
-            });
-        });
-
-//int|id, HH:mm|startTime, long|durationMillis, yyyy-MM-dd:date, X.XX|distance
+    //int|id, HH:mm|startTime, long|durationMillis, yyyy-MM-dd:date, X.XX|distance
     FitBitService.logActivity = function (auth, activityId, startTime, durationMillis, date, distance, distanceUnit) {
-        return new Promises(function (fullfill, reject) {
+        return new P(function (fullfill, reject) {
             var postParams = {
                 'activityId': activityId,
                 'startTime': startTime,
@@ -71,16 +17,12 @@ module.exports = function (session) {
 
             console.log(postParams);
 
-            _strat._oauth.post('https://api.fitbit.com/1/user/-/activities.json', auth.token, auth.tokenSecret, postParams, function (err, body, res) {
+            oauthClient.post('https://api.fitbit.com/1/user/-/activities.json', auth.token, auth.tokenSecret, postParams, function (err, body, res) {
                 if (err) { console.log(err); reject(err); }
                 fullfill(body);
             });
 
         });
-    };
-
-    FitBitService.getOauthStrategy = function () {
-        return _strat;
     };
 
     return FitBitService;
