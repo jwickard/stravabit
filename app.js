@@ -1,11 +1,11 @@
 var express = require('express');
 var session = require('cookie-session')({secret: '1234567890QWERTY'});
-var fitBitClient = require('./src/fitbit')(session);
-var stravaClient = require('./src/strava')(session);
 var cookieParser = require('cookie-parser');
 var morgan = require('morgan');
 var passport = require('passport');
 var OauthUtils = require('./lib/Oauth')(session);
+var fitBitClient = require('./src/fitbit')(OauthUtils.fitBitOauth);
+var stravaClient = require('./src/strava')(OauthUtils.stravaOauth);
 
 
 //fire up our micro services container
