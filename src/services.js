@@ -60,7 +60,7 @@ module.exports = function(fitbitClient, stravaClient){
             ActivityModel.count({activityId: args.activity.id}, function(err, c){
                 if(err) { done(err, null); }
 
-                if(c == 0){
+                if(c === 0){
                     //no activity logged, log our activity.
 
                     //pick out the fitbit auth.
