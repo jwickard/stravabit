@@ -3,9 +3,16 @@ var session = require('cookie-session')({secret: '1234567890QWERTY'});
 var cookieParser = require('cookie-parser');
 var morgan = require('morgan');
 var passport = require('passport');
-var OauthUtils = require('./lib/Oauth')(session);
-var fitBitClient = require('./src/fitbit')(OauthUtils.fitBitOauth);
-var stravaClient = require('./src/strava')(OauthUtils.stravaOauth);
+var User = require('./models/User');
+var Authentication = require('./models/Authentication');
+var OauthUtils = require('./lib/OauthUtils')(User, Authentication);
+var FitBitStrategy = require('./lib/FitBitStrategy')(session);
+var StravaStrategy = require('./lib/StravaStrategy')(session);
+var fitBitClient = require('./src/fitbit')(FitBitStrategy.oauth);
+var stravaClient = require('./src/strava')(StravaStrategy.oauth);
+var mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost/stravabit');
 
 
 //fire up our micro services container
@@ -25,8 +32,8 @@ app.use(session);
 //configure passport oauth middleware
 passport.serializeUser(OauthUtils.serializeUser);
 passport.deserializeUser(OauthUtils.deserializeUser);
-passport.use(OauthUtils.FitBit);
-passport.use(OauthUtils.Strava);
+passport.use(FitBitStrategy.Strategy);
+passport.use(StravaStrategy.Strategy);
 app.use(passport.initialize());
 
 app.use(express.static('./public'));

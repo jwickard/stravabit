@@ -1,7 +1,7 @@
 var seneca = require('seneca')();
-var AuthModel = require('./models').AuthModel;
-var UserModel = require('./models').UserModel;
-var ActivityModel = require('./models').ActivityModel;
+var Authentication = require('../models/Authentication');
+var User = require('../models/User');
+var Activity = require('../models/Activity');
 var dateformat = require('dateformat');
 var activityMap = {'Run': 90009, 'Ride': 90001 };
 
@@ -13,10 +13,10 @@ module.exports = function(fitbitClient, stravaClient){
         .add({cmd: 'syncProfile'}, function(args, done){
             var _container = this;
 
-            UserModel.findOne({_id: args.userId}, function(err, user){
+            User.findOne({_id: args.userId}, function(err, user){
                 if(err) { console.log(err); }
 
-                AuthModel.find({userId: args.userId}, function(err, auths){
+                Authentication.find({userId: args.userId}, function(err, auths){
                     if(err) { console.log(err); }
 
                     var stravaAuth;
@@ -57,7 +57,7 @@ module.exports = function(fitbitClient, stravaClient){
             var fitbitAuth;
 
             //check for existing log of this activity:
-            ActivityModel.count({activityId: args.activity.id}, function(err, c){
+            Activity.count({activityId: args.activity.id}, function(err, c){
                 if(err) { done(err, null); }
 
                 if(c === 0){
@@ -81,7 +81,7 @@ module.exports = function(fitbitClient, stravaClient){
                         function(fitbitresponse){
 
                             //logged activity with fitbit, save stat for
-                            var stat = new ActivityModel({
+                            var stat = new Activity({
                                 userId: args.user._id,
                                 activityId: args.activity.id,
                                 name: args.activity.name,
