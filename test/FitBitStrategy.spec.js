@@ -44,13 +44,13 @@ describe('FitBitStrategy', function(){
         });
 
         it('should call OauthUtil.handleOauthCallback', function(){
-            strategy.verify(profile, token, tokenSecret);
+            strategy.verify(token, tokenSecret, {}, profile);
 
             expect(oauthUtils.handleOauthCallback).to.calledOnce;
         });
 
         it('should set the session userId', function(){
-            strategy.verify(profile, token, tokenSecret, function(user){
+            strategy.verify(token, tokenSecret, {}, profile, function(user){
                 expect(session.userId).to.equal(user.id);
             });
         });
