@@ -1,10 +1,11 @@
 var P = require('promise');
+var debug = require('debug')('app:int');
 
 module.exports = function (oauthClient) {
-    var FitBitService = {};
+    var FitbitClient = {};
 
     //int|id, HH:mm|startTime, long|durationMillis, yyyy-MM-dd:date, X.XX|distance
-    FitBitService.logActivity = function (auth, activityId, startTime, durationMillis, date, distance, distanceUnit) {
+    FitbitClient.logActivity = function (auth, activityId, startTime, durationMillis, date, distance, distanceUnit) {
         return new P(function (fullfill, reject) {
             var postParams = {
                 'activityId': activityId,
@@ -15,16 +16,16 @@ module.exports = function (oauthClient) {
                 'distanceUnit': distanceUnit
             };
 
-            console.log(postParams);
+            debug(postParams);
 
             oauthClient.post('https://api.fitbit.com/1/user/-/activities.json', auth.token, auth.tokenSecret, postParams, function (err, body, res) {
-                if (err) { console.log(err); reject(err); }
+                if (err) { debug(err); reject(err); }
                 fullfill(body);
             });
 
         });
     };
 
-    return FitBitService;
+    return FitbitClient;
 };
 

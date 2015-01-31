@@ -1,7 +1,5 @@
 var chai = require('chai');
-//var P = require('promise');
 var sinon = require('sinon');
-//require('sinon-as-promised')(P);
 var sinonChai = require('sinon-chai');
 var expect = chai.expect;
 var FitBitStrategy = require('../lib/FitBitStrategy');

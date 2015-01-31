@@ -8,7 +8,7 @@ var Authentication = require('./models/Authentication');
 var OauthUtils = require('./lib/OauthUtils')(User, Authentication);
 var FitBitStrategy = require('./lib/FitBitStrategy')(session, OauthUtils);
 var StravaStrategy = require('./lib/StravaStrategy')(session, OauthUtils);
-var fitBitClient = require('./src/fitbit')(FitBitStrategy.oauth);
+var fitBitClient = require('./src/FitbitClient')(FitBitStrategy.oauth);
 var stravaClient = require('./src/strava')(StravaStrategy.oauth);
 var mongoose = require('mongoose');
 
