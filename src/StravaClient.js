@@ -1,13 +1,15 @@
 var P = require('promise');
 var StravaClient = {};
 
+var TWO_DAYS = (24*60*60)*2;
+
 module.exports = function(oauthClient){
 
     StravaClient = {};
 
     StravaClient.loadActivities = function(token, last){
         if(!last){
-            last = (new Date().getTime()-((24*60*60*1000)*2))/1000;
+            last = (new Date().getTime()-TWO_DAYS);
         }
 
         return new P(function(fullfill, reject){
