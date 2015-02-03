@@ -1,6 +1,8 @@
 stravabit
 =========
 
+[![Build Status](https://travis-ci.org/jwickard/stravabit.svg)](https://travis-ci.org/jwickard/stravabit)
+
 strava - fitbit activty sych
 
 Mongo / Mongoose
