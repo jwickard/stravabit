@@ -1,4 +1,3 @@
-var P = require('promise');
 var debug = require('debug')('app:int');
 
 module.exports = function (oauthClient) {
@@ -6,7 +5,7 @@ module.exports = function (oauthClient) {
 
     //int|id, HH:mm|startTime, long|durationMillis, yyyy-MM-dd:date, X.XX|distance
     FitbitClient.logActivity = function (auth, activityId, startTime, durationMillis, date, distance, distanceUnit) {
-        return new P(function (fullfill, reject) {
+        return new Promise(function (fullfill, reject) {
             var postParams = {
                 'activityId': activityId,
                 'startTime': startTime,

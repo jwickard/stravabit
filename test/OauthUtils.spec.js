@@ -1,7 +1,6 @@
 var chai = require('chai');
-var P = require('promise');
 var sinon = require('sinon');
-require('sinon-as-promised')(P);
+require('sinon-as-promised')(Promise);
 var sinonChai = require('sinon-chai');
 var expect = chai.expect;
 var OauthUtils = require('../lib/OauthUtils');
