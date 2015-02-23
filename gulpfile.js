@@ -14,7 +14,7 @@ gulp.task('lint', function(){
 });
 
 gulp.task('test', function (cb) {
-    gulp.src(['./lib/*.js', './models/*.js', './src/*.js'])
+    gulp.src(['./lib/*.js', './models/*.js', './src/FitbitClient.js', './src/StravaClient.js', './src/Services.js'])
         .pipe(istanbul({includeUntested: true})) // Covering files
         .pipe(istanbul.hookRequire()) // Force `require` to return covered files
         .on('finish', function () {

@@ -1,3 +1,4 @@
+var seneca = require('seneca')();
 var express = require('express');
 var session = require('cookie-session')({secret: '1234567890QWERTY'});
 var cookieParser = require('cookie-parser');
@@ -5,6 +6,7 @@ var morgan = require('morgan');
 var passport = require('passport');
 var User = require('./models/User');
 var Authentication = require('./models/Authentication');
+var Activity = require('./models/Activity');
 var OauthUtils = require('./lib/OauthUtils')(User, Authentication);
 var FitBitStrategy = require('./lib/FitBitStrategy')(session, OauthUtils);
 var StravaStrategy = require('./lib/StravaStrategy')(session, OauthUtils);
@@ -14,11 +16,16 @@ var mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost/stravabit');
 
-
+//define transport at middleware level
+//seneca.use('seneca-rabbitmq-transport');
 //fire up our micro services container
-var Services = require('./src/services')(fitBitClient, stravaClient);
+var Services = require('./src/Services')(seneca, User, Authentication, Activity, fitBitClient, stravaClient);
 
-app = express();
+//spin up services...
+//Services.seneca.listen({type:'rabbitmq'});
+Services.seneca.listen();
+
+var app = express();
 
 //setup our middleware
 
